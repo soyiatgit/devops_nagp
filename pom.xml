@@ -27,16 +27,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!--  <dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency> -->
-		
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency> -->
-		
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-spatial</artifactId>
@@ -56,6 +46,30 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator-autoconfigure</artifactId>
         </dependency>
+        
+         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <!--  <scope>test</scope> -->
+        </dependency>
+        
+        <dependency>
+    		<groupId>org.mockito</groupId>
+    		<artifactId>mockito-junit-jupiter</artifactId>
+    		<!-- <version>4.1.0</version> -->
+    		<!-- <scope>test</scope> -->
+		</dependency>
+        
+        <dependency>
+    		<groupId>org.mockito</groupId>
+    		<artifactId>mockito-core</artifactId>
+    		<!--  <scope>test</scope> -->
+		</dependency>
+		
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -77,17 +91,52 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- configuring the surefire plugin below to run the integration and unit tests in different phases -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+			    <skipTests>true</skipTests>
+			    </configuration>
+			   <executions>
+			     <execution>
+			       <id>unit-tests</id>
+			       <phase>test</phase>
+			       <goals>
+			         <goal>test</goal>
+			        </goals>
+			       <configuration>
+			        <skipTests>false</skipTests>
+			        <includes>
+			          <include>**/*TestCase.java</include>
+			        </includes>
+			      </configuration>
+			     </execution>
+			     <execution>
+			      <id>integration-tests</id>
+			       <phase>integration-test</phase>
+			       <goals>
+			        <goal>test</goal>
+			      </goals>
+			       <configuration>
+			        <skipTests>false</skipTests>
+			        <includes>
+			          <include>**/*TestCase.*</include>
+			        </includes>
+			      </configuration>
+			    </execution>
+			  </executions>
+            </plugin>
+			
 		</plugins>
 	</build>
 

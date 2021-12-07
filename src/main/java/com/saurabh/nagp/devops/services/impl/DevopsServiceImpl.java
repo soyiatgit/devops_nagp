@@ -38,9 +38,14 @@ public class DevopsServiceImpl implements DevopsService {
 	public CloudProviderDTO addCloudProvider(CloudProviderDTO cloudProviderDTO) {
 		CloudProvidersEntity cloudProvidersEntity = new CloudProvidersEntity();
 		BeanUtils.copyProperties(cloudProviderDTO, cloudProvidersEntity);
-		System.out.println(cloudProvidersEntity.getId());
-		devopsRepo.save(cloudProvidersEntity);
-		return cloudProviderDTO;
+		CloudProvidersEntity savedEntity = devopsRepo.save(cloudProvidersEntity);
+		CloudProviderDTO savedCloudProviderDTO = new CloudProviderDTO();
+		cloudProviderDTO.setCode(savedEntity.getCode());
+		cloudProviderDTO.setId(savedEntity.getId());
+		cloudProviderDTO.setName(savedEntity.getName());
+		cloudProviderDTO.setOwner(savedEntity.getOwner());
+		cloudProviderDTO.setServices(savedEntity.getServices());
+		return savedCloudProviderDTO;
 	}
 
 	
